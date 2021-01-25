@@ -1,0 +1,78 @@
+<% include ../partials/upper %>
+
+<div class='container'>
+	<div class='row'>
+		<div class='col-md-3'>
+			<p class='lead'>Camp Topics</p>
+			<div class='list-group'>
+				<div class='list-group-item active'>Topic 1</div>
+				<div class='list-group-item'>Topic 2</div>
+				<div class='list-group-item'>Topic 3</div>
+			</div>
+			<!-- MAP -->
+		</div>
+		<div class='col-md-9'>
+			<div class='thumbnail'>
+				<img class='img-responsive' src='<%= camp.image %>'>
+				<div class='caption'> <!-- class='caption-full' -->
+					<h4 class='pull-right'>Rs. <%= camp.price %>/night</h4>
+					<h4><a><%= camp.name %></a></h4>
+					<p><%= camp.description %></p>
+					<p>
+						<em>Submitted by <%= camp.author.username %></em>
+					</p>
+					<% if(currentUser.isAdmin || (currentUser.isNormUser.canEditPost && camp.author.id.equals(currentUser._id))){ %>
+					<a class='btn btn-warning' href='/campgrounds/<%= camp._id %>/edit'>Edit</a>
+					<% } %>
+					<% if(currentUser.isAdmin || (currentUser.isNormUser.canDeletePost && camp.author.id.equals(currentUser._id))){ %>
+					<form id='deleteForm' action='/campgrounds/<%= camp._id %>?_method=DELETE'
+						  method='POST'>
+						<button class='btn btn-danger'>Remove</button>
+					</form>
+					<% } %>
+				</div>
+				
+			</div>
+			<% if(currentUser.isAdmin || currentUser.isNormUser.canCommentEdit || camp.comments.length){ %>
+			<div class='well'>
+				<% if(currentUser.isNormUser.canCommentEdit){ %>
+				<div class='text-right'>
+					<a class='btn btn-success' href='/campgrounds/<%= camp._id %>/comments/new'>Leave A Review</a>
+				</div>
+				<hr>
+				<% } %>
+				<% camp.comments.forEach(function(comment){ %>
+					<div class='row'>
+						<div class='col-md-12'>
+							<strong><%= comment.author.username %></strong>
+							<span class='pull-right'>1 week ago</span>
+							<p>
+								<%= comment.text %>
+							</p>
+							<% if(currentUser.isAdmin || (currentUser.isNormUser.canCommentEdit && comment.author.id.equals(currentUser._id))){ %>
+							<a style='margin-bottom: 15px; padding-top: 3px' class='btn btn-xs btn-warning'
+							   href='/campgrounds/<%= camp._id %>/comments/<%= comment._id %>/edit'>
+							   Edit
+							</a>
+							<% } %>
+							<% if(currentUser.isAdmin || (currentUser.isNormUser.canDelComment && comment.author.id.equals(currentUser._id))){ %>
+							<form id='deleteForm'
+								  action='/campgrounds/<%= camp._id %>/comments/<%= comment._id %>?_method=DELETE'
+								  method='POST'>
+								<!-- <button class='btn btn-xs btn-danger'>Remove</button> -->
+								<input style='margin-bottom: 15px; padding-top: 3px' type='submit' class='btn btn-xs btn-danger' value='Delete'>
+							</form>
+							<% } %>
+						</div>
+					</div>
+					
+				<% }) %>
+			</div>
+			<% } %>
+		</div>
+	</div>
+</div>
+
+<a href='/campgrounds' class='btn btn-primary '><- Back</a>
+
+<% include ../partials/lower %>

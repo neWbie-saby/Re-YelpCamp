@@ -1,0 +1,60 @@
+<% include ../partials/upper %>
+
+<div class='container' style='width: 30%; margin: 0 auto;'>
+	<h1 style='text-align: center; padding-bottom: 10px;'>Edit User: <%= user.username %></h1>
+	<div class='row' style='list-style: none'>
+		<form action='/list/<%= user._id %>?_method=PUT' method='POST'>
+			<li>
+				<div class='custom-control custom-checkbox'>
+					Superuser
+					<input class='custom-control-input' type='checkbox' name='edited[isAdmin]'
+						   <% if(user.isAdmin){ %> 
+						   checked
+						   <% } %>>
+				</div>
+			</li>
+			<li>
+				<div class='custom-control custom-checkbox'>
+						Can create and edit own posts
+						<input class='custom-control-input' type='checkbox' name='edited[isNormUser][canEditPost]'
+							   <% if(user.isNormUser.canEditPost){ %> 
+							   checked
+							   <% } %> >
+				</div>
+			</li>
+			<li>
+				<div class='custom-control custom-checkbox'>
+				Can delete own posts
+					<input class='custom-control-input' type='checkbox' name='edited[isNormUser][canDeletePost]'
+							   <% if(user.isNormUser.canDeletePost){ %> 
+							   checked
+							   <% } %> >
+				</div>
+			</li>
+			<li>
+				<div class='custom-control custom-checkbox'>
+					Can comment and edit comments on all posts
+					<input class='custom-control-input' type='checkbox' name='edited[isNormUser][canCommentEdit]'
+							   <% if(user.isNormUser.canCommentEdit){ %> 
+							   checked
+							   <% } %> >
+				</div>
+			</li>
+			<li>
+				<div class='custom-control custom-checkbox'>
+					Can delete own comments
+					<input class='custom-control-input' type='checkbox' name='edited[isNormUser][canDelComment]'
+							   <% if(user.isNormUser.canDelComment){ %> 
+							   checked
+							   <% } %> >
+				</div>
+			</li>
+			<hr>
+			<div class='form-group'>
+				<button class='btn btn-lg btn-default btn-primary btn-block'>Submit</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<% include ../partials/lower %>
